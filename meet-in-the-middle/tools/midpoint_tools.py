@@ -68,6 +68,85 @@ class MidpointTool:
             'adjustment_km': round(adjustment, 2)
         }
 
+    def find_time_fair_midpoint(
+            self,
+            coord1: Dict[str, float],
+            coord2: Dict[str, float],
+            mode1: str = 'transit',
+            mode2: str = 'transit',
+            distance_matrix_tool=None
+    ) -> Dict[str, float]:
+        """
+        Find midpoint where TRAVEL TIMES are most equal (not just distance)
+
+        This is the SECRET WEAPON feature - calculates actual travel times
+        to find the fairest meeting point.
+
+        :param coord1: First location coordinates
+        :param coord2: Second location coordinates
+        :param mode1: Travel mode for person 1 (walking/transit/driving/bicycling)
+        :param mode2: Travel mode for person 2
+        :param distance_matrix_tool: DistanceMatrixTool instance for calculating travel times
+        :return: Midpoint coordinates with travel time information
+        """
+
+        if distance_matrix_tool is None:
+            # Fall back to weighted geographic midpoint
+            print("   ⚠️  No DistanceMatrixTool provided, using geographic weighting")
+            return self.calculate_weighted_midpoint(coord1, coord2, mode1, mode2)
+
+        # Generate candidate points along the line between the two locations
+        num_candidates = 7
+        candidates = []
+
+        for i in range(num_candidates):
+            ratio = i / (num_candidates - 1)  # Creates ratios from 0.0 to 1.0
+            candidate_lat = coord1['lat'] + (coord2['lat'] - coord1['lat']) * ratio
+            candidate_lng = coord1['lng'] + (coord2['lng'] - coord1['lng']) * ratio
+            candidates.append({'lat': candidate_lat, 'lng': candidate_lng})
+
+        print(f"   🔍 Testing {num_candidates} candidate midpoints for time fairness...")
+
+        # Find candidate with most equal travel times
+        best_candidate = None
+        best_fairness = 0
+        best_comparison = None
+
+        for candidate in candidates:
+            # Get actual travel times from both people to this candidate point
+            comparison = distance_matrix_tool.compare_travel_times(
+                coord1, coord2, candidate,
+                mode1, mode2
+            )
+
+            if comparison['success']:
+                fairness = comparison['fairness_ratio']
+
+                # Keep track of the most fair option
+                if fairness > best_fairness:
+                    best_fairness = fairness
+                    best_candidate = candidate
+                    best_comparison = comparison
+
+        if best_candidate is None:
+            print("   ⚠️  Could not calculate time-based fairness, using geographic midpoint")
+            return self.calculate_weighted_midpoint(coord1, coord2, mode1, mode2)
+
+        print(f"   ✅ Found time-fair midpoint (fairness: {best_fairness})")
+
+        return {
+            'lat': best_candidate['lat'],
+            'lng': best_candidate['lng'],
+            'method': 'time_based_fairness',
+            'mode1': mode1,
+            'mode2': mode2,
+            'travel_time_person1': best_comparison['person1']['duration_text'],
+            'travel_time_person2': best_comparison['person2']['duration_text'],
+            'time_difference_minutes': best_comparison['time_difference_minutes'],
+            'fairness_ratio': best_fairness
+        }
+
+
     def _calculate_distance(self, lat1: float, lng1: float, lat2: float, lng2: float) -> float:
         """
         Calculate the distance between two points using Haversine formula
