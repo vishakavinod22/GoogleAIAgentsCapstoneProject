@@ -5,8 +5,6 @@ Converts addresses and landmarks to GPS coordinates using the Google Maps API
 import requests
 from typing import Optional, Dict
 
-from test_setup import response
-
 
 class GeocodingTool:
     """Tool to convert location names to coordinates like latitude and longitude"""
