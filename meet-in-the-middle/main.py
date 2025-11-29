@@ -6,6 +6,7 @@ import os
 from dotenv import load_dotenv
 from agents.location_agent import LocationAgent
 from agents.place_finder_agent import PlaceFinderAgent
+from agents.ranking_agent import RankingAgent
 from tools.geocoding_tool import GeocodingTool
 from tools.midpoint_tools import MidpointTool
 from tools.places_tool import PlacesTool
@@ -52,6 +53,9 @@ def main():
     print("PlaceFinderAgent ready\n")
     distance_matrix = DistanceMatrixTool(maps_key)
     print("DistanceMatrixTool ready\n")
+
+    ranking_agent = RankingAgent(gemini_key, distance_matrix)
+    print("RankingAgent ready")
 
     # Get user input
     print("Please enter two locations to find a fair meeting point:")
@@ -158,22 +162,48 @@ def main():
         radius=2000
     )
 
-    if places_result['success']:
-        print(f"\n✅ Found {places_result['total_found']} great options!\n")
-
-        # Show top 5 results
-        for i, place in enumerate(places_result['places'][:5], 1):
-            print(f"{i}. 📍 {place['name']}")
-            print(f"   Address: {place['address']}")
-            print(f"   Rating: ⭐ {place['rating']} ({place['user_ratings_total']} reviews)")
-            print(f"   Price: {'💰' * int(place['price_level']) if isinstance(place['price_level'], int) else '💰'}")
-            if place['open_now'] is not None:
-                status = "🟢 Open now" if place['open_now'] else "🔴 Closed"
-                print(f"   Status: {status}")
-            print(f"   Map: https://www.google.com/maps?q={place['lat']},{place['lng']}")
-            print()
-    else:
+    if not places_result['success']:
         print(f"❌ Could not find places: {places_result['error']}")
+    else:
+        print(f"✅ Found {places_result['total_found']} places")
+
+    # STEP 5: Rank the places with AI
+    print(f"\n🏆 STEP 5: Ranking places with AI...")
+    print("-" * 60)
+
+    ranked_places = ranking_agent.rank_places(
+        places=places_result['places'],
+        person1_location={'lat': coords_1['lat'], 'lng': coords_1['lng']},
+        person2_location={'lat': coords_2['lat'], 'lng': coords_2['lng']},
+        mode1=mode_1,
+        mode2=mode_2
+    )
+
+    print(f"\n✅ Top {min(5, len(ranked_places))} Recommendations:\n")
+
+    # Show top 5 ranked results
+    for place in ranked_places[:5]:
+        print(f"#{place['rank']}. 📍 {place['name']}")
+        print(f"    Address: {place['address']}")
+        print(f"    Rating: ⭐ {place['rating']} ({place['user_ratings_total']} reviews)")
+
+        # Show travel times if available
+        if 'time_person1' in place and place['time_person1'] != 'unknown':
+            print(f"    Travel: Person 1: {place['time_person1']} | Person 2: {place['time_person2']}")
+            print(f"    Fairness: {place.get('travel_fairness', 'N/A')}")
+
+        # Show AI reasoning
+        print(f"    💡 Why: {place.get('ai_reasoning', 'No reasoning')}")
+
+        # Price and status
+        price_display = '💰' * int(place['price_level']) if isinstance(place['price_level'], int) else '💰'
+        print(f"    Price: {price_display}")
+        if place['open_now'] is not None:
+            status = "🟢 Open now" if place['open_now'] else "🔴 Closed"
+            print(f"    Status: {status}")
+
+        print(f"    Map: https://www.google.com/maps?q={place['lat']},{place['lng']}")
+        print()
 
 
 
