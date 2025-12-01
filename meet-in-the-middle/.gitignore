@@ -6,3 +6,6 @@ __pycache__/
 .idea/
 
 tests/
+
+test_memory.json
+user_memory.json
