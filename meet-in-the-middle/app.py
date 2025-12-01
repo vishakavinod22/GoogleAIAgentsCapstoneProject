@@ -10,31 +10,61 @@ from tools.geocoding_tool import GeocodingTool
 from tools.midpoint_tools import MidpointTool
 from tools.places_tool import PlacesTool
 from tools.distance_matrix_tool import DistanceMatrixTool
+from PIL import Image
 
 # Page config
 st.set_page_config(
     page_title="Meet in the Middle",
-    page_icon="🤝",
+    page_icon="images/logo.png",
     layout="wide"
 )
 
 # Title
-st.title(" Meet in the Middle")
+icon = Image.open("images/meet_icon.png")
+col1, col2 = st.columns([1, 10])
+
+with col1:
+    st.image(icon, use_column_width=True)
+
+with col2:
+    st.title("Meet in the Middle")
+
 st.subheader("AI-Powered Fair Meeting Location Finder")
 st.markdown("Find the perfect meeting spot with time-based fairness!")
+
+with st.expander("💡 Tips for Best Results"):
+    st.markdown("""
+    **Location Input Guidelines:**
+
+    ✅ **Good Examples:**
+    - "Yorkdale Shopping Centre, Toronto, ON"
+    - "CN Tower, 301 Front Street West, Toronto"
+    - "Union Station, 65 Front St W, Toronto, ON M5J 1E6"
+
+    ❌ **Avoid:**
+    - "Yorkdale" (too vague)
+    - "downtown" (ambiguous)
+    - "the mall" (which mall?)
+
+    **Why it matters:** 
+    Detailed locations help our AI agents accurately geocode your starting points 
+    and calculate fair travel times. The more specific you are, the better your results!
+    """)
+
+st.markdown("---")
+
 st.markdown("---")
 
 # Sidebar for API keys
-st.sidebar.header("⚙️ Configuration")
-st.sidebar.markdown("Add your API keys in Streamlit secrets (for deployment) or enter below:")
+st.sidebar.header("API Keys and Agents Status")
 
 # Get API keys from Streamlit secrets or sidebar
 try:
     GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
     GOOGLE_MAPS_API_KEY = st.secrets["GOOGLE_MAPS_API_KEY"]
 except:
-    GEMINI_API_KEY = st.sidebar.text_input("Gemini API Key", type="password")
-    GOOGLE_MAPS_API_KEY = st.sidebar.text_input("Google Maps API Key", type="password")
+    st.error("⚠️ API keys not configured")
+    st.stop()
 
 if not GEMINI_API_KEY or not GOOGLE_MAPS_API_KEY:
     st.warning("⚠️ Please add API keys in the sidebar or configure Streamlit secrets")
@@ -80,10 +110,10 @@ with col1:
 
 with col2:
     st.markdown("### 📍 Person 2")
-    location_2 = st.text_input("Location", placeholder="Yorkdale Mall", key="loc2")
+    location_2 = st.text_input("Location", placeholder="Yorkdale Mall, Toronto", key="loc2")
     mode_2 = st.selectbox("Travel Mode", ["walking", "transit", "driving", "bicycling"], key="mode2")
 
-place_type = st.selectbox("☕ What type of place?", ["cafe", "restaurant", "park", "bar", "library"])
+place_type = st.selectbox("☕ What type of place?", ["cafe", "restaurant", "park", "bar", "library", "mall"])
 
 # Search button
 if st.button("🔍 Find Meeting Spots", type="primary", use_container_width=True):
@@ -165,15 +195,15 @@ if st.button("🔍 Find Meeting Spots", type="primary", use_container_width=True
 
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("Person 1 Travel", midpoint.get('travel_time_person1', 'N/A'))
+            st.metric("Person 1 Travel ~", midpoint.get('travel_time_person1', 'N/A'))
         with col2:
-            st.metric("Person 2 Travel", midpoint.get('travel_time_person2', 'N/A'))
+            st.metric("Person 2 Travel ~", midpoint.get('travel_time_person2', 'N/A'))
         with col3:
-            st.metric("Time Difference", f"{midpoint.get('time_difference_minutes', 'N/A')} min")
+            st.metric("Time Difference ~", f"{midpoint.get('time_difference_minutes', 'N/A')} min")
 
-        # Map link
-        st.markdown(f"📍 **Coordinates:** {midpoint['lat']:.6f}, {midpoint['lng']:.6f}")
-        st.markdown(f"🗺️ [View on Google Maps](https://www.google.com/maps?q={midpoint['lat']},{midpoint['lng']})")
+        # # Map link
+        # st.markdown(f"📍 **Coordinates:** {midpoint['lat']:.6f}, {midpoint['lng']:.6f}")
+        # st.markdown(f"🗺️ [View on Google Maps](https://www.google.com/maps?q={midpoint['lat']},{midpoint['lng']})")
 
         # Display ranked places
         st.markdown("---")
@@ -220,10 +250,11 @@ if st.button("🔍 Find Meeting Spots", type="primary", use_container_width=True
 st.markdown("---")
 st.markdown("""
 **Built with:**
-- 🤖 Google ADK Multi-Agent System
-- 🧠 Gemini AI for intelligent reasoning
-- 🗺️ Google Maps Platform APIs
-- ⚡ Streamlit for web interface
+- Google ADK Multi-Agent System
+- Gemini AI for intelligent reasoning
+- Google Maps Platform APIs
+- Streamlit for web interface
+- [Tour icons](https://www.flaticon.com/free-icons/tour) created by Freepik - Flaticon 
 
-[View Code on GitHub](https://github.com/YOUR_USERNAME/meet-in-the-middle) | Google AI Agents Capstone Project
+[View Code on GitHub](https://github.com/vishakavinod22/GoogleAIAgentsCapstoneProject) | Google AI Agents Capstone Project
 """)
