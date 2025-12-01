@@ -188,6 +188,26 @@ This project demonstrates **3+ required criteria:**
 
 ---
 
+
+## Demo
+
+- Demo Video: https://youtu.be/jQxHne0hI2U
+- Live Demo: https://meetinthemiddle.streamlit.app
+- GitHub: https://github.com/vishakavinod22/GoogleAIAgentsCapstoneProject/
+
+---
+
+## Competition Criteria Met
+
+| Criteria | Implementation                             | Status |
+|----------|--------------------------------------------|--------|
+| **Multi-Agent System** | Agent powered by an LLM, Sequential agents | ✅ |
+| **Tools** | 4 Custom tools                             | ✅ |
+| **Sessions & Memory** | Sessions & state management               | ✅ |
+| **Agent deployment** |       https://meetinthemiddle.streamlit.app        | ✅
+
+---
+
 ## Prerequisites
 
 - Python 3.11 or higher
@@ -364,25 +384,6 @@ No infrastructure management required - fully serverless deployment.
 
 - `GEMINI_API_KEY` - Get from: https://aistudio.google.com/apikey
 - `GOOGLE_MAPS_API_KEY` - Get from: https://console.cloud.google.com/apis/credentials
-
----
-
-## Demo
-
-- Demo Video: https://youtu.be/jQxHne0hI2U
-- Live Demo: https://meetinthemiddle.streamlit.app
-- GitHub: https://github.com/vishakavinod22/GoogleAIAgentsCapstoneProject/
-
----
-
-## Competition Criteria Met
-
-| Criteria | Implementation                             | Status |
-|----------|--------------------------------------------|--------|
-| **Multi-Agent System** | Agent powered by an LLM, Sequential agents | ✅ |
-| **Tools** | 4 Custom tools                             | ✅ |
-| **Sessions & Memory** | Sessions & state management               | ✅ |
-| **Agent deployment** |       https://meetinthemiddle.streamlit.app        | ✅
 
 ---
 
