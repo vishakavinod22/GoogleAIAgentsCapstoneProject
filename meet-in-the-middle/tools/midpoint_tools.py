@@ -6,7 +6,28 @@ import math
 from typing import Dict, Tuple
 
 class MidpointTool:
-    """Tool that calculates the fair midpoints based on modes of transport"""
+    """
+    Tool that calculates the fair midpoints based on modes of transport
+
+    Find midpoint where TRAVEL TIMES are most equal (not just distance)
+
+    This is the SECRET WEAPON feature that makes our system fair.
+
+    How it works:
+    1. Generate 7 candidate points along the line between the two locations
+       (at 0%, 16.7%, 33.3%, 50%, 66.7%, 83.3%, and 100% of the distance)
+    2. For each candidate, calculate actual travel times for both people
+       using their specified travel modes
+    3. Compute a fairness score for each candidate:
+       fairness = min(time1, time2) / max(time1, time2)
+       (Score of 1.0 = perfectly equal, 0.5 = one person takes 2x longer)
+    4. Select the candidate with the highest fairness score
+
+    Why 7 candidates?
+    - Enough granularity to find optimal point
+    - Not so many that API costs become prohibitive
+    - Testing shows diminishing returns beyond 7-10 points
+    """
 
     TRAVEL_WEIGHTS = {
         'walking': 1.0, # Slowest - pull midpoint closer to this

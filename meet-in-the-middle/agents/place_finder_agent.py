@@ -8,7 +8,14 @@ from typing import Dict, List
 
 
 class PlaceFinderAgent:
-    """Agent that intelligently finds and recommends meeting places"""
+    """
+    Agent that intelligently finds and recommends meeting places
+
+    This agent:
+    - Understands natural language preferences ("quiet cafe", "lively restaurant")
+    - Searches for places using Google Places API
+    - Filters and returns contextually relevant options
+    """
 
     def __init__(self, api_key: str, places_tool):
         """Initialize agent with Gemini and Places tool"""

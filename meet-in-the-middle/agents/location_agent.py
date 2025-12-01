@@ -8,7 +8,15 @@ from google.genai import types
 
 
 class LocationAgent:
-    """Agent that understands and validates location inputs"""
+    """
+    Agent that understands and validates location inputs
+
+    This agent uses Gemini AI to:
+    - Parse natural language location descriptions
+    - Validate that locations are real places
+    - Extract structured data (address, city) from user input
+
+    """
 
     def __init__(self, api_key: str):
         """Initialize agent with gemini client"""

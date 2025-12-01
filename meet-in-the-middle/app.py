@@ -12,7 +12,6 @@ from tools.places_tool import PlacesTool
 from tools.distance_matrix_tool import DistanceMatrixTool
 from PIL import Image
 
-
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 logo_path = os.path.join(BASE_DIR, "images", "logo.png")
 logo = Image.open(logo_path)
@@ -21,8 +20,24 @@ logo = Image.open(logo_path)
 st.set_page_config(
     page_title="Meet in the Middle",
     page_icon=logo_path,
-    layout="wide"
+    layout="wide",
+    menu_items={
+        'Get Help': None,
+        'Report a bug': None,
+        'About': None
+    }
 )
+
+# Hide hamburger menu, footer, and header
+hide_streamlit_style = """
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    header {visibility: hidden;}
+    .stDeployButton {display:none;}
+    </style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # Title
 
@@ -34,6 +49,16 @@ st.title("Meet in the Middle")
 st.subheader("AI-Powered Fair Meeting Location Finder")
 st.markdown("Find the perfect meeting spot with time-based fairness!")
 
+st.markdown("""
+**How it works:**  
+1. Enter your location.  
+2. Enter your friend's location.  
+3. Choose how you're traveling.  
+
+Our AI calculates a **time-fair midpoint** where both of you travel approximately the same amount of time.  
+We’ll then suggest **nearby cafés, restaurants, parks, and hangout spots** that make meeting convenient for all.
+""")
+
 with st.expander("💡 Tips for Best Results"):
     st.markdown("""
     **Location Input Guidelines:**
@@ -43,7 +68,7 @@ with st.expander("💡 Tips for Best Results"):
     Include street address, landmark name, and city for best results!
 
     ✅ **Good Examples:**
-    - "Yorkdale Shopping Centre, Toronto, ON"
+    - "Yorkdale Shopping Centre, Toronto"
     - "CN Tower, 301 Front Street West, Toronto"
     - "Union Station, 65 Front St W, Toronto, ON M5J 1E6"
 
@@ -108,16 +133,26 @@ st.sidebar.success("✅ All agents ready!")
 col1, col2 = st.columns(2)
 
 with col1:
-    st.markdown("### 📍 Person 1")
-    location_1 = st.text_input("Location", placeholder="CN Tower, Toronto", key="loc1")
-    mode_1 = st.selectbox("Travel Mode", ["walking", "transit", "driving", "bicycling"], key="mode1")
+    st.markdown("### 📍Person 1's Starting Location")
+    location_1 = st.text_input(
+        "Where is Person 1 starting from?",
+        placeholder="e.g., CN Tower, Toronto",
+        key="loc1",
+        help="💡 Person 1's starting point"
+    )
+    mode_1 = st.selectbox("Person 1's Mode of Travel", ["Walking", "Transit", "Driving", "Bicycling"], key="mode1")
 
 with col2:
-    st.markdown("### 📍 Person 2")
-    location_2 = st.text_input("Location", placeholder="Yorkdale Mall, Toronto", key="loc2")
-    mode_2 = st.selectbox("Travel Mode", ["walking", "transit", "driving", "bicycling"], key="mode2")
+    st.markdown("### 📍 Person 2's Starting Location")
+    location_2 = st.text_input(
+        "Where is Person 2 starting from?",
+        placeholder="e.g., Yorkdale Shopping Centre, Toronto, ON",
+        key="loc2",
+        help="💡 Person 2's starting point"
+    )
+    mode_2 = st.selectbox("Person 2's Mode of Travel", ["Walking", "Transit", "Driving", "Bicycling"], key="mode2")
 
-place_type = st.selectbox("☕ What type of place?", ["cafe", "restaurant", "park", "bar", "library", "mall"])
+place_type = st.selectbox("What type of place?", ["Cafe", "Restaurant", "Park", "Bar", "Library", "Mall"])
 
 # Search button
 if st.button("🔍 Find Meeting Spots", type="primary", use_container_width=True):
@@ -176,7 +211,7 @@ if st.button("🔍 Find Meeting Spots", type="primary", use_container_width=True
             st.stop()
 
         # Step 5: Rank
-        status.text("🏆 Step 5/5: Ranking with AI...")
+        status.text("🏆 Step 5/5: Ranking with AI (Might take a couple minutes)...")
         progress_bar.progress(90)
 
         ranked_places = ranking_agent.rank_places(
@@ -199,11 +234,11 @@ if st.button("🔍 Find Meeting Spots", type="primary", use_container_width=True
 
         col1, col2, col3 = st.columns(3)
         with col1:
-            st.metric("Person 1 Travel ~", midpoint.get('travel_time_person1', 'N/A'))
+            st.metric("Person 1 Travel", f"~{midpoint.get('travel_time_person1', 'N/A')}")
         with col2:
-            st.metric("Person 2 Travel ~", midpoint.get('travel_time_person2', 'N/A'))
+            st.metric("Person 2 Travel", f"~{midpoint.get('travel_time_person2', 'N/A')}")
         with col3:
-            st.metric("Time Difference ~", f"{midpoint.get('time_difference_minutes', 'N/A')} min")
+            st.metric("Time Difference", f"~{midpoint.get('time_difference_minutes', 'N/A')} min")
 
         # # Map link
         # st.markdown(f"📍 **Coordinates:** {midpoint['lat']:.6f}, {midpoint['lng']:.6f}")

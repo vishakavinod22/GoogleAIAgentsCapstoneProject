@@ -9,7 +9,19 @@ import json
 
 
 class RankingAgent:
-    """Agent that ranks places using AI reasoning and multiple criteria"""
+    """
+    Agent that ranks places using AI reasoning and multiple criteria
+
+    This is the core intelligence of the system. It combines:
+    1. Travel time fairness (are both people traveling similar times?)
+    2. Distance fairness (geographic equity)
+    3. Place quality (ratings, reviews)
+    4. Practical factors (open now, price level)
+    5. User preferences from memory
+
+    The AI weighs all factors and provides human-readable reasoning
+    for each ranking decision.
+    """
 
     def __init__(self, api_key: str, distance_matrix_tool=None):
         """
