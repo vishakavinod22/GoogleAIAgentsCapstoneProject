@@ -59,10 +59,8 @@ with st.expander("💡 Tips for Best Results"):
 
 st.markdown("---")
 
-st.markdown("---")
-
 # Sidebar for API keys
-st.sidebar.header("API Keys and Agents Status")
+st.sidebar.header("Agents Status")
 
 # Get API keys from Streamlit secrets or sidebar
 try:
@@ -260,7 +258,7 @@ st.markdown("""
 - Gemini AI for intelligent reasoning
 - Google Maps Platform APIs
 - Streamlit for web interface
-- [Tour icons](https://www.flaticon.com/free-icons/tour) created by Freepik - Flaticon 
+- Tour icons created by Freepik - [Flaticon](https://www.flaticon.com/free-icons/tour) 
 
 [View Code on GitHub](https://github.com/vishakavinod22/GoogleAIAgentsCapstoneProject) | Google AI Agents Capstone Project
 """)
