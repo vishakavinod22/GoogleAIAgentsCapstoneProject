@@ -12,22 +12,24 @@ from tools.places_tool import PlacesTool
 from tools.distance_matrix_tool import DistanceMatrixTool
 from PIL import Image
 
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+logo_path = os.path.join(BASE_DIR, "images", "logo.png")
+logo = Image.open(logo_path)
+
 # Page config
 st.set_page_config(
     page_title="Meet in the Middle",
-    page_icon="images/logo.png",
+    page_icon=logo_path,
     layout="wide"
 )
 
 # Title
-icon = Image.open("images/logo.png")
+
 col1, col2 = st.columns([1, 10])
 
-with col1:
-    st.image(icon, use_column_width=True)
-
-with col2:
-    st.title("Meet in the Middle")
+st.image(logo, width=50)
+st.title("Meet in the Middle")
 
 st.subheader("AI-Powered Fair Meeting Location Finder")
 st.markdown("Find the perfect meeting spot with time-based fairness!")
@@ -35,6 +37,10 @@ st.markdown("Find the perfect meeting spot with time-based fairness!")
 with st.expander("💡 Tips for Best Results"):
     st.markdown("""
     **Location Input Guidelines:**
+    
+    Be specific! 
+    
+    Include street address, landmark name, and city for best results!
 
     ✅ **Good Examples:**
     - "Yorkdale Shopping Centre, Toronto, ON"
