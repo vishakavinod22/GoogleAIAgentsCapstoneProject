@@ -20,7 +20,7 @@ st.set_page_config(
 )
 
 # Title
-icon = Image.open("images/meet_icon.png")
+icon = Image.open("images/logo.png")
 col1, col2 = st.columns([1, 10])
 
 with col1:
