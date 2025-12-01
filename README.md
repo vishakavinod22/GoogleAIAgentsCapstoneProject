@@ -35,6 +35,26 @@ Unlike traditional midpoint calculators, we calculate **actual travel times** to
 
 ---
 
+
+## Demo
+
+- Demo Video: https://youtu.be/jQxHne0hI2U
+- Live Demo: https://meetinthemiddle.streamlit.app
+- GitHub: https://github.com/vishakavinod22/GoogleAIAgentsCapstoneProject/
+
+---
+
+## Competition Criteria Met
+
+| Criteria | Implementation                             | Status |
+|----------|--------------------------------------------|--------|
+| **Multi-Agent System** | Agent powered by an LLM, Sequential agents | ✅ |
+| **Tools** | 4 Custom tools                             | ✅ |
+| **Sessions & Memory** | Sessions & state management               | ✅ |
+| **Agent deployment** |       https://meetinthemiddle.streamlit.app        | ✅
+
+---
+
 ## Architecture
 
 ### Multi-Agent System
@@ -185,26 +205,6 @@ This project demonstrates **3+ required criteria:**
 - Change place type without re-entering locations
 - Adjust search radius
 - Set preferences that persist across sessions
-
----
-
-
-## Demo
-
-- Demo Video: https://youtu.be/jQxHne0hI2U
-- Live Demo: https://meetinthemiddle.streamlit.app
-- GitHub: https://github.com/vishakavinod22/GoogleAIAgentsCapstoneProject/
-
----
-
-## Competition Criteria Met
-
-| Criteria | Implementation                             | Status |
-|----------|--------------------------------------------|--------|
-| **Multi-Agent System** | Agent powered by an LLM, Sequential agents | ✅ |
-| **Tools** | 4 Custom tools                             | ✅ |
-| **Sessions & Memory** | Sessions & state management               | ✅ |
-| **Agent deployment** |       https://meetinthemiddle.streamlit.app        | ✅
 
 ---
 
