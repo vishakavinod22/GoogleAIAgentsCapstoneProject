@@ -50,7 +50,7 @@ Unlike traditional midpoint calculators, we calculate **actual travel times** to
 | **Multi-Agent System** | Agent powered by an LLM, Sequential agents | ✅ |
 | **Tools** | 4 Custom tools                             | ✅ |
 | **Sessions & Memory** | Sessions & state management               | ✅ |
-| **Agent deployment** |       https://meetinthemiddle.streamlit.app        | ✅
+| **Agent deployment** |      (update: site is no longer deployed)      | ✅ 
 
 ---
 
@@ -156,7 +156,7 @@ This project demonstrates **3+ required criteria:**
 - Context retention across refinements
 
 ### 4. Agent deployment ✅
-- The agent is deployed with Streamlit and can be accessed [here](https://meetinthemiddle.streamlit.app)
+- The agent is deployed with Streamlit (update: site is no longer deployed)
 
 ### Example Output
 ```
@@ -333,7 +333,6 @@ meet-in-the-middle/
 ## Deployment
 
 - **Platform:** Streamlit Community Cloud  
-- **Live URL:** https://meetinthemiddle.streamlit.app
 - **Status:** ✅ Deployed and publicly accessible
 
 The application is deployed on Streamlit's cloud platform, providing:
