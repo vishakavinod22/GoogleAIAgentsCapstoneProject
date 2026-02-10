@@ -39,7 +39,6 @@ Unlike traditional midpoint calculators, we calculate **actual travel times** to
 ## Demo
 
 - Demo Video: https://youtu.be/jQxHne0hI2U
-- Live Demo: https://meetinthemiddle.streamlit.app
 - GitHub: https://github.com/vishakavinod22/GoogleAIAgentsCapstoneProject/
 
 ---
